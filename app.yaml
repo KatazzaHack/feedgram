@@ -1,0 +1,12 @@
+runtime: go116  # or another supported version
+
+instance_class: F2
+
+handlers:
+- url: /login/new_user
+
+- url: /media/:media_id
+
+- url: /:user_name
+
+- url: /:user_name/new_media
