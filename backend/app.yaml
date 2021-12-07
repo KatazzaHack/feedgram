@@ -4,9 +4,13 @@ instance_class: F2
 
 handlers:
 - url: /login/new_user
+  script: main.go
 
 - url: /media/:media_id
+  script: main.go
 
 - url: /:user_name
+  script: main.go
 
 - url: /:user_name/new_media
+  script: main.go
