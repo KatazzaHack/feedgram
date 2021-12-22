@@ -1,8 +1,9 @@
 package types
 
 type UserInfo struct {
-	UserName  string
-	MediaList []string
+	UserName  string `datastore:"user_name"`
+	MediaList []string `datastore:"media_ids"`
+	UserId    string `datastore:"user_id"`
 }
 
 type Database struct {
