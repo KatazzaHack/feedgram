@@ -1,6 +1,10 @@
 runtime: go116  # or another supported version
 
-instance_class: F2
+main: ./cmd/main
+
+env_variables:
+  GIN_MODE: release
+  GO111MODULE: on
 
 handlers:
 - url: /login/new_user
