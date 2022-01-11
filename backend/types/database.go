@@ -6,6 +6,11 @@ type UserInfo struct {
 	UserId    string `datastore:"user_id"`
 }
 
+type User struct {
+	UserName  string `datastore:"user_name"`
+	UserId    string `datastore:"user_id"`
+}
+
 type Database struct {
 	UserNameToId map[string]string
 	UserInformation map[string]UserInfo
