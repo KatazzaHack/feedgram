@@ -17,13 +17,6 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -53,7 +46,7 @@ const Section = ({children, title}): Node => {
         style={[
           styles.sectionTitle,
           {
-            color: Colors.white,
+            color: "000000",
           },
         ]}>
         {title}
@@ -62,7 +55,7 @@ const Section = ({children, title}): Node => {
         style={[
           styles.sectionDescription,
           {
-            color: Colors.light,
+            color: "ffffff",
           },
         ]}>
         {children}
@@ -73,7 +66,7 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const backgroundStyle = {
-    backgroundColor: Colors.lighter,
+    backgroundColor: "0f0f0f",
   };
 
   const Tab = createMaterialBottomTabNavigator();
