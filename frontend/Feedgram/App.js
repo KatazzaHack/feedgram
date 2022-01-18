@@ -22,6 +22,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import AccountPage from './ui/AccountPage.js';
+import NewPostPage from './ui/NewPostPage.js';
 
 const HomeScreen = (): Node =>  {
   return (
@@ -75,8 +76,8 @@ const App: () => Node = () => {
   <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Account" component={AccountPage} />
+        <Tab.Screen name="New Post" component={NewPostPage} />
+        <Tab.Screen name="My Account" component={AccountPage} />
       </Tab.Navigator>
     </NavigationContainer>
   );
