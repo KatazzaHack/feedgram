@@ -46,7 +46,7 @@ const Section = ({children, title}): Node => {
         style={[
           styles.sectionTitle,
           {
-            color: "000000",
+            color: "#000000",
           },
         ]}>
         {title}
@@ -55,7 +55,7 @@ const Section = ({children, title}): Node => {
         style={[
           styles.sectionDescription,
           {
-            color: "ffffff",
+            color: "#ffffff",
           },
         ]}>
         {children}
@@ -66,7 +66,7 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const backgroundStyle = {
-    backgroundColor: "0f0f0f",
+    backgroundColor: "#ff0000",
   };
 
   const Tab = createMaterialBottomTabNavigator();
