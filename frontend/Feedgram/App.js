@@ -28,7 +28,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import AccountPage from './AccountPage.js';
+import AccountPage from './ui/AccountPage.js';
 
 const HomeScreen = (): Node =>  {
   return (
