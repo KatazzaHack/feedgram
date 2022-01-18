@@ -6,6 +6,7 @@ env_variables:
   GIN_MODE: release
   GO111MODULE: on
   PROJECTID: feedgram-333720
+  BUCKETSTORAGENAME: feedgram-images
 
 handlers:
 - url: /login/new_user

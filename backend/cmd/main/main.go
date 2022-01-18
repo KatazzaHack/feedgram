@@ -6,10 +6,14 @@ import (
 
 	"FeedGram/handlers"
 	"FeedGram/types"
+	"FeedGram/clients"
 )
 
 func main() {
 	types.GlobalDatabase = types.NewDatabase()
+	clients.Uploader = clients.NewUploader()
+	clients.DSClient = clients.NewDatastoreClient()
+	
 	router := gin.Default()
 
 	router.POST("/login/new_user", handlers.CreateNewUser)

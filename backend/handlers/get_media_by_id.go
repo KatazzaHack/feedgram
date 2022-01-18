@@ -3,12 +3,26 @@ package handlers
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"FeedGram/types"
+	"context"
+	"time"
+	"io/ioutil"
+	"FeedGram/clients"
+	b64 "encoding/base64"
 )
+
+func DownloadFile(object string) []byte {
+	ctx := context.Background()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	defer cancel()
+
+	rc, _ := clients.Uploader.Cl.Bucket(clients.Uploader.BucketName).Object(clients.Uploader.UploadPath + object).NewReader(ctx)
+	defer rc.Close()
+	slurp, _ := ioutil.ReadAll(rc)
+	return slurp;
+}
 
 func GetMediaById(c *gin.Context) {
 	media_id := c.Param("media_id")
-	media_data := types.GlobalDatabase.MediaToData[media_id]
-	// TODO: Get the media from the blob storage.
-	c.String(http.StatusOK, "Media data received = %s", media_data)
+	c.String(http.StatusOK, "%s", b64.StdEncoding.EncodeToString(DownloadFile(media_id)))
 }
