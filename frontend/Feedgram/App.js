@@ -28,23 +28,23 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import { AccountPage } from './AccountPage.js';
+import AccountPage from './AccountPage.js';
 
-function HomeScreen() {
+const HomeScreen = (): Node =>  {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home!</Text>
     </View>
   );
-}
+};
 
-function SettingsScreen() {
+const SettingsScreen = (): Node => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+      <Text>Settings!!</Text>
     </View>
   );
-}
+};
 
 const Section = ({children, title}): Node => {
   return (

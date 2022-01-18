@@ -1,32 +1,25 @@
 import React, { Component } from 'react'
 import {
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
   View,
 } from 'react-native'
 
-import { Post } from './Post.js';
+import Post from './Post.js';
 
-export class AccountPage extends Component {
-  // TODO: Get posts for specific user.df fsf
-  getPosts() {
-    return ["data1", "data2", "data3"]
-  }
+const AccountPage = (): Node => {
+    // TODO: Get posts for the current logged in user.
+    const posts = ["data1", "data2", "data3"];
 
-  renderPost(item) {
-    return (<Post data={item}/>);
-  }
+    renderPost = (item) => <Post data={item}/>;
 
-  render() {
     return (
       <View>
          <FlatList
-            data={this.getPosts()}
-            renderItem={({item}) => this.renderPost(item)}
+            data={posts}
+            renderItem={(item) => renderPost(item.item)}
          />
       </View>
-    )
-  }
-}
+    );
+};
+
+export default AccountPage;

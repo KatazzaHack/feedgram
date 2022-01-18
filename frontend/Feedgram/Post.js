@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   Text,
   View,
 } from 'react-native'
 
-export class Post extends Component {
- render() {
+const Post = (props): Node => {
     return (
       <View>
-        <Text> {this.props.data} </Text>
+        <Text> {props.data} </Text>
       </View>
-    )
-  }
-}
+    );
+};
+
+export default Post;
