@@ -35,7 +35,5 @@ func GetMediaForUser(c *gin.Context) {
 	if _, err := client.GetAll(c, q, &userInformation); err != nil {
 		log.Fatalf("Failed to get user: %v", err)
 	}
-	c.String(http.StatusOK, "Media of the %s: %s",
-		user_name,
-		strings.Join(userInformation[0].MediaList, ", "))
+	c.String(http.StatusOK, "%s", strings.Join(userInformation[0].MediaList, "\n"))
 }

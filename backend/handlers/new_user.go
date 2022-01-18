@@ -17,7 +17,7 @@ func SaveUserInformation(c *gin.Context, un string, uid string, client *datastor
 
 	userInfo := types.UserInfo {
 		UserName: un,
-		MediaList: []string{"foo"},
+		MediaList: []string{},
 		UserId:  uid,
 	}
 
