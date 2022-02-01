@@ -8,9 +8,15 @@ import DocumentPicker, {
   isInProgress,
   types,
 } from 'react-native-document-picker';
+import Post from './Post.js';
 
 const NewPostPage = (): Node => {
-    const [result, setResult] = useState();
+    const [filePath, setFilePath] = useState();
+
+    const handleFileChoice = (file) => {
+        setFilePath(file[0].uri);
+        console.log(file[0].uri);
+    };
 
     const handleError = (err: unknown) => {
         if (DocumentPicker.isCancel(err)) {
@@ -30,10 +36,11 @@ const NewPostPage = (): Node => {
                   DocumentPicker.pick({
                     type: types.images,
                   })
-                  .then(setResult)
+                  .then(handleFileChoice)
                   .catch(handleError)
                 }}
             />
+            <Post image_uri={filePath}/>
         </View>);
 };
 

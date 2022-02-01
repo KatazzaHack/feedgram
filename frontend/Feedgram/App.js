@@ -24,7 +24,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import AccountPage from './ui/AccountPage.js';
 import NewPostPage from './ui/NewPostPage.js';
 
-const HomeScreen = (): Node =>  {
+const SearchPage = (): Node =>  {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home!</Text>
@@ -75,7 +75,7 @@ const App: () => Node = () => {
   return (
   <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Search" component={SearchPage} />
         <Tab.Screen name="New Post" component={NewPostPage} />
         <Tab.Screen name="My Account" component={AccountPage} />
       </Tab.Navigator>

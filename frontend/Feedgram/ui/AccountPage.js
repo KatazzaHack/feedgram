@@ -8,9 +8,10 @@ import Post from './Post.js';
 
 const AccountPage = (): Node => {
     // TODO: Get posts for the current logged in user.
-    const posts = ["data1", "data2", "data3"];
+    const posts = ['https://reactnative.dev/img/tiny_logo.png',
+        'content://com.android.providers.media.documents/document/image%3A25'];
 
-    renderPost = (item) => <Post data={item}/>;
+    renderPost = (item) => <Post image_uri={item}/>;
 
     return (
       <View>
