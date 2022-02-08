@@ -23,47 +23,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import AccountPage from './ui/AccountPage.js';
 import NewPostPage from './ui/NewPostPage.js';
-
-const SearchPage = (): Node =>  {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-};
-
-const SettingsScreen = (): Node => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!!</Text>
-    </View>
-  );
-};
-
-const Section = ({children, title}): Node => {
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: "#000000",
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: "#ffffff",
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import SearchPage from './ui/SearchPage.js';
 
 const App: () => Node = () => {
   const backgroundStyle = {
@@ -82,24 +42,5 @@ const App: () => Node = () => {
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
