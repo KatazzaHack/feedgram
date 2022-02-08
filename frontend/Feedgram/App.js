@@ -8,6 +8,7 @@
 
 import React from 'react';
 import type {Node} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   ScrollView,
@@ -24,23 +25,49 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import AccountPage from './ui/AccountPage.js';
 import NewPostPage from './ui/NewPostPage.js';
 import SearchPage from './ui/SearchPage.js';
+import LoginPage from './ui/LoginPage.js';
 
 const App: () => Node = () => {
+  const [username, onUsernameChanged] = React.useState(null);
+
   const backgroundStyle = {
     backgroundColor: "#ff0000",
   };
 
   const Tab = createMaterialBottomTabNavigator();
 
-  return (
-  <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Search" component={SearchPage} />
-        <Tab.Screen name="New Post" component={NewPostPage} />
-        <Tab.Screen name="My Account" component={AccountPage} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+  const getData = async () => {
+    console.log("getData");
+    try {
+        const username = await AsyncStorage.getItem('@storage_username');
+        if (username !== null) {
+            console.log("user exists: ", username);
+            onUsernameChanged(username);
+        } else {
+            console.log("user doesn't exists");
+        }
+    } catch(e) {
+        //TODO: Handle error
+        console.log("error fetching username"
+        console.log(e
+    }
+  }
+
+  getData();
+
+  if (!username) {
+    return <LoginPage/>;
+  } else {
+    return (
+      <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Search" component={SearchPage} />
+            <Tab.Screen name="New Post" component={NewPostPage} />
+            <Tab.Screen name="My Account" component={AccountPage} />
+          </Tab.Navigator>
+        </NavigationContainer>
+    );
+  };
 };
 
 export default App;
