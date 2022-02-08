@@ -1,5 +1,5 @@
 runtime: go116  # or another supported version
-
+service: feedgram-backend
 main: ./cmd/main
 
 env_variables:
