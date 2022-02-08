@@ -48,8 +48,7 @@ const App: () => Node = () => {
         }
     } catch(e) {
         //TODO: Handle error
-        console.log("error fetching username"
-        console.log(e
+        console.log("error fetching username")
     }
   }
 
