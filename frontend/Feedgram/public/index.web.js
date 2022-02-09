@@ -5,7 +5,7 @@ import {
   Text,
   View
 } from 'react-native';
-import App from './App.js';
+import App from '../App.js';
 
 class ReactNativeWeb extends Component {
   render() {
