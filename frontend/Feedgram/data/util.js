@@ -14,7 +14,7 @@ export const getMediaIdsForUser = async (user_name) => {
     {method: 'GET',
      headers: headers,
     });
-    const json = await response.text();
+    const json = await response.json();
     return json;
   } catch (error) {
     console.error(error);
