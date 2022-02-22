@@ -62,4 +62,5 @@ func CreateNewUser(c *gin.Context) {
 	user_id := uuid.New().String()
 	SaveUserInformation(c, user_name, user_id, client);
 	SaveUserMapping(c, user_name, user_id, client);
+	c.JSON(http.StatusOK, gin.H {"status": "ok"})
 }

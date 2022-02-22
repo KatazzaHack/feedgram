@@ -82,6 +82,5 @@ func CreateNewMedia(c *gin.Context) {
 	}
 	data, _ := media_data.Open()
 	UploadFile(data, new_media_id)
-	c.String(http.StatusOK, "Media of the %s",
-		media_data.Filename)
+	c.JSON(http.StatusOK, gin.H {"id": media_data.Filename})
 }
