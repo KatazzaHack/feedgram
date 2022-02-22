@@ -1,4 +1,4 @@
-const anton = "http://feedgram-backend.feedgram-333720.ew.r.appspot.com";
+const feedgram_backend = "http://feedgram-backend.feedgram-333720.ew.r.appspot.com";
 const headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -10,11 +10,11 @@ const headers = {
 export const getMediaIdsForUser = async (user_name) => {
   try {
     const response = await fetch(
-    `${anton}/${user_name}`,
+    `${feedgram_backend}/${user_name}`,
     {method: 'GET',
      headers: headers,
     });
-    const json = await response.json();
+    const json = await response.text();
     return json;
   } catch (error) {
     console.error(error);
@@ -24,7 +24,7 @@ export const getMediaIdsForUser = async (user_name) => {
 export const newUser = async (user_name) => {
   try {
     const response = await fetch(
-    `${anton}/login/new_user/`,
+    `${feedgram_backend}/login/new_user/`,
     {method: 'POST',
      headers: headers,
      body: JSON.stringify({
@@ -41,7 +41,7 @@ export const newUser = async (user_name) => {
 export const getMediaById = async (media_id) => {
   try {
     const response = await fetch(
-    `${anton}/media/${media_id}`,
+    `${feedgram_backend}/media/${media_id}`,
     {method: 'GET',
      headers: headers,
     });
@@ -56,7 +56,7 @@ export const getMediaById = async (media_id) => {
 export const newMedia = async (user_name, media_id) => {
   try {
     const response = await fetch(
-    `${anton}/${user_name}/media/`,
+    `${feedgram_backend}/${user_name}/media/`,
     {method: 'POST',
      headers: headers,
     });
