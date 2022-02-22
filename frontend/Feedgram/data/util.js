@@ -15,7 +15,7 @@ export const getMediaIdsForUser = async (user_name) => {
      headers: headers,
     });
     const json = await response.json();
-    return json;
+    return json['ids'];
   } catch (error) {
     console.error(error);
   }
@@ -46,7 +46,7 @@ export const getMediaById = async (media_id) => {
      headers: headers,
     });
     const json = await response.json();
-    return json;
+    return json["id"];
   } catch (error) {
     console.error(error);
   }
