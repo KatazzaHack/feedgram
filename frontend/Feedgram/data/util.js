@@ -1,7 +1,10 @@
 const feedgram_backend = "http://feedgram-backend.feedgram-333720.ew.r.appspot.com";
+// TODO(maffina,antonhulikau): get rid of the unused headers
 const headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
+    'Access-Control-Request-Headers':  '*',
+    'Access-Control-Allow-Headers':  '*',
     'Access-Control-Allow-Origin':  '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
