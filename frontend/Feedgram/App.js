@@ -6,9 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState, createContext} from 'react';
 import type {Node} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,57 +15,56 @@ import {
   StyleSheet,
   Text,
   View,
+  ActivityIndicator,
 } from 'react-native';
 
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import AccountPage from './ui/AccountPage.js';
-import NewPostPage from './ui/NewPostPage.js';
-import SearchPage from './ui/SearchPage.js';
+import Home from './ui/Home.js';
 import LoginPage from './ui/LoginPage.js';
 
+import {getUsername} from './data/persistent_data.js';
+
+const Stack = createNativeStackNavigator();
+
 const App: () => Node = () => {
-  const [username, onUsernameChanged] = React.useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState(null);
 
   const backgroundStyle = {
     backgroundColor: "#ff0000",
   };
 
-  const Tab = createMaterialBottomTabNavigator();
+  getUsername().then(username => {
+    console.log(username);
+    setUsername(username);
+    setIsLoading(false);
+  });
+  console.log("logged in user: ", username);
 
-  const getData = async () => {
-    console.log("getData");
-    try {
-        const username = await AsyncStorage.getItem('@storage_username');
-        if (username !== null) {
-            console.log("user exists: ", username);
-            onUsernameChanged(username);
-        } else {
-            console.log("user doesn't exists");
-        }
-    } catch(e) {
-        //TODO: Handle error
-        console.log("error fetching username")
-    }
+  if (isLoading) {
+    return <ActivityIndicator/>;
   }
 
-  getData();
-
-  if (!username) {
-    return <LoginPage/>;
-  } else {
-    return (
-      <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="Search" component={SearchPage} />
-            <Tab.Screen name="New Post" component={NewPostPage} />
-            <Tab.Screen name="My Account" component={AccountPage} />
-          </Tab.Navigator>
-        </NavigationContainer>
-    );
-  };
+  return (
+    <NavigationContainer>
+        <Stack.Navigator>
+            {username == null ? (
+                <Stack.Screen
+                    name="login"
+                    component={LoginPage}
+                />
+            ) : (
+                <Stack.Screen
+                    name="home"
+                    component={Home}
+                />
+            )}
+        </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;

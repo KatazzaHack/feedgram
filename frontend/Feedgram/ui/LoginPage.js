@@ -9,7 +9,7 @@ import {
 const LoginPage = (): Node => {
     const [username, onUsernameChanged] = React.useState(null);
 
-    const storeUsername = async (username) => {
+    const confirmUsername = async (username) => {
         try {
             console.log("new user is created: ", username);
             await AsyncStorage.setItem('@storage_username', username);
@@ -27,7 +27,7 @@ const LoginPage = (): Node => {
          />
          <Button
             title="OK"
-            onPress={() => storeUsername(username)}
+            onPress={() => confirmUsername(username)}
          />
       </View>
     );
