@@ -14,8 +14,7 @@ const SearchPage = (): Node => {
 
     onUsernameConfirmed = () => {
         // TODO: Get posts for the specified user |username|.
-        setPosts(['https://reactnative.dev/img/tiny_logo.png',
-            'content://com.android.providers.media.documents/document/image%3A25']);
+        setPosts(['https://reactnative.dev/img/tiny_logo.png']);
     };
     renderPost = (imageUri) => <Post image_uri={imageUri}/>;
 

@@ -29,6 +29,8 @@ const NewPostPage = (): Node => {
         }
     };
 
+    console.log("Trying to create a new Post");
+
     return (
         <View>
             <Button title="Choose file"
