@@ -29,4 +29,7 @@ module.exports = {
       'react-native': 'react-native-web',
     },
   },
+  devServer: {
+    allowedHosts: 'all',
+  },
 };
