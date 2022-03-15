@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
@@ -6,13 +6,17 @@ import {
   Button
 } from 'react-native';
 
+import { AuthContext } from "../data/persistent_data.js";
+
 const LoginPage = (): Node => {
     const [username, onUsernameChanged] = React.useState(null);
+    const authContext = useContext(AuthContext);
 
     const confirmUsername = async (username) => {
         try {
-            console.log("new user is created: ", username);
             await AsyncStorage.setItem('@storage_username', username);
+            console.log("New user is written to AsyncStorage: ", username);
+            authContext(username);
         } catch (e) {
             //TODO: Handle error.
         }

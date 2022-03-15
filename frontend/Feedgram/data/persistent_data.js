@@ -1,19 +1,22 @@
+import {createContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Context created for setting the username. Used on the login page.
+export const AuthContext = createContext();
+
 export const getUsername = async () => {
-  console.log("getData");
   try {
     const username = await AsyncStorage.getItem('@storage_username');
     if (username !== null) {
-      console.log("user exists: ", username);
+      console.log("User already exists in AsyncStorage: ", username);
       return username;
     } else {
-      console.log("user doesn't exists");
+      console.log("User doesn't exist in AsyncStorage");
       return null;
     }
   } catch(e) {
     //TODO: Handle error
-    console.log("error fetching username");
+    console.log("Error fetching username from the AsyncStorage");
     return null;
   }
 };
