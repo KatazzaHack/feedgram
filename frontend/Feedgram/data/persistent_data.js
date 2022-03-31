@@ -15,11 +15,11 @@ export const getUsername = async () => {
       return username;
     } else {
       console.log("User doesn't exist in AsyncStorage");
-      return null;
+      return "";
     }
   } catch(e) {
     //TODO: Handle error
     console.log("Error fetching username from the AsyncStorage");
-    return null;
+    return "";
   }
 };

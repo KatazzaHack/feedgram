@@ -47,11 +47,12 @@ const App: () => Node = () => {
   }
 
   return (
+
       <AuthContext.Provider value={(username) => setUsername(username)}>
          <UsernameContext.Provider value={username}>
             <NavigationContainer>
                 <Stack.Navigator>
-                    {username == null ? (
+                    {username == "" ? (
                         <Stack.Screen
                             name="login"
                             component={LoginPage}
@@ -68,5 +69,4 @@ const App: () => Node = () => {
       </AuthContext.Provider>
   );
 };
-
 export default App;
