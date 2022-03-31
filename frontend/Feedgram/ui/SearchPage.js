@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import {
   FlatList,
   View,
@@ -7,14 +7,29 @@ import {
 } from 'react-native'
 
 import Post from './Post.js';
+import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
 
 const SearchPage = (): Node => {
-    const [username, onUsernameChanged] = React.useState(null);
+    const [usernameSearchField, onUsernameSearchFieldChanged] = React.useState("");
+    const [username, onUsernameChanged] = React.useState("");
     const [posts, setPosts] = React.useState();
 
+    useEffect(() => {
+        async function fetchMediaIds() {
+          mediaIds = await getMediaIdsForUser(username);
+          var nPosts = [];
+          mediaIds.forEach(id => {
+            getMediaById(id).then(media => {
+               nPosts.push(media);
+               setPosts(nPosts);
+            });
+          })
+        }
+        fetchMediaIds();
+    }, [username]);
+
     onUsernameConfirmed = () => {
-        // TODO: Get posts for the specified user |username|.
-        setPosts(['https://reactnative.dev/img/tiny_logo.png']);
+        onUsernameChanged(usernameSearchField);
     };
     renderPost = (imageUri) => <Post image_uri={imageUri}/>;
 
