@@ -1,44 +1,41 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 import {
   FlatList,
   View,
   Text,
-} from 'react-native'
+  ActivityIndicator,
+} from 'react-native';
 
 import Post from './Post.js';
 
-import { getMediaIdsForUser } from '../data/network_requests.js'
-import { getMediaById } from '../data/network_requests.js'
+import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
 import { UsernameContext } from '../data/persistent_data.js';
 
 const AccountPage = (): Node => {
-    // TODO: Get posts for the current logged in user.
-    const POSTS = ['https://reactnative.dev/img/tiny_logo.png',
-    'https://reactnative.dev/img/tiny_logo.png'];
-
     const [posts, setPosts] = useState([]);
-    const [mediaIds, setMediaIds] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const username = useContext(UsernameContext);
 
     useEffect(() => {
         async function fetchMediaIds() {
-          mediaIdsResponse = await getMediaIdsForUser(username);
-          console.log(mediaIdsResponse);
+          mediaIds = await getMediaIdsForUser(username);
+          console.log('Media ids: ', mediaIds);
           var nPosts = [];
-          mediaIdsResponse.forEach(id => {
-            mediaIdResponse = getMediaById(id);
-            nPosts.push(mediaIdResponse);
+          mediaIds.forEach(id => {
+            getMediaById(id).then(media => {
+               nPosts.push(media);
+               setPosts(nPosts);
+            });
           })
-          setPosts(POSTS);
         }
-        fetchMediaIds();
+        fetchMediaIds().then(() => setIsLoading(false));
     }, [username]);
 
-    renderPost = (item) => <Post image_uri={item}/>;
+    const renderPost = (item) => <Post image_uri={item}/>;
 
-     if (posts.length === 0) {
-       return (<Text>Loading...</Text>);
+     if (isLoading) {
+       return <ActivityIndicator/>;
      }
      return (
           <View>
