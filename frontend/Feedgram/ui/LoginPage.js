@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import { AuthContext } from "../data/persistent_data.js";
+import { newUser } from '../data/network_requests.js'
 
 const LoginPage = (): Node => {
     const [username, onUsernameChanged] = React.useState(null);
@@ -14,9 +15,12 @@ const LoginPage = (): Node => {
 
     const confirmUsername = async (username) => {
         try {
-            await AsyncStorage.setItem('@storage_username', username);
-            console.log("New user is written to AsyncStorage: ", username);
-            authContext(username);
+            const response = await newUser(username);
+            if (response["status"] == "ok") {
+                await AsyncStorage.setItem('@storage_username', username);
+                console.log("New user is written to AsyncStorage: ", username);
+                authContext(username);
+            }
         } catch (e) {
             //TODO: Handle error.
         }
