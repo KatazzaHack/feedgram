@@ -1,0 +1,22 @@
+runtime: go116  # or another supported version
+service: feedgram-backend
+main: ./cmd/main
+
+env_variables:
+  GIN_MODE: release
+  GO111MODULE: on
+  PROJECTID: feedgram-333720
+  BUCKETSTORAGENAME: feedgram-images
+
+handlers:
+- url: /login/new_user
+  script: main.go
+
+- url: /media/:media_id
+  script: main.go
+
+- url: /:user_name
+  script: main.go
+
+- url: /:user_name/new_media
+  script: main.go
