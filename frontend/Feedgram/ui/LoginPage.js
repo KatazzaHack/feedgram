@@ -22,7 +22,7 @@ const LoginPage = (): Node => {
                 authContext(username);
             }
         } catch (e) {
-            //TODO: Handle error.
+            console.error(e);
         }
     }
 
