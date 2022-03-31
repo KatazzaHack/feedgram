@@ -7,8 +7,8 @@ import {
 
 import Post from './Post.js';
 
-import {getMediaIdsForUser} from '../data/util.js'
-import {getMediaById} from '../data/util.js'
+import {getMediaIdsForUser} from '../data/network_requests.js'
+import {getMediaById} from '../data/network_requests.js'
 import {getUsername} from '../data/persistent_data.js';
 
 const AccountPage = (): Node => {
