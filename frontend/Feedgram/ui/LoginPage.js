@@ -10,7 +10,7 @@ import { AuthContext } from "../data/persistent_data.js";
 import { newUser } from '../data/network_requests.js'
 
 const LoginPage = (): Node => {
-    const [username, onUsernameChanged] = React.useState(null);
+    const [username, onUsernameChanged] = React.useState("");
     const authContext = useContext(AuthContext);
 
     const confirmUsername = async (username) => {

@@ -18,6 +18,9 @@ const AccountPage = (): Node => {
     const username = useContext(UsernameContext);
 
     useEffect(() => {
+        if (!username) {
+            return;
+        }
         async function fetchMediaIds() {
           mediaIds = await getMediaIdsForUser(username);
           console.log('Media ids: ', mediaIds);

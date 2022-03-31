@@ -5,8 +5,24 @@
     <meta charSet="utf-8" />
     <meta content="initial-scale=1,width=device-width" name="viewport" />
 </head>
+<style>
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+      }
+</style>
 <body>
-<div id="react-native-web-root"></div>
+<div id="react-native-web-root" style="display:flex;height:100%" ></div>
 <script type="text/javascript" src="/dist/bundle.js"></script>
 </body>
 </html>
