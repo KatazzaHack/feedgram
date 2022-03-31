@@ -25,7 +25,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './ui/Home.js';
 import LoginPage from './ui/LoginPage.js';
 
-import {AuthContext, getUsername} from './data/persistent_data.js';
+import {AuthContext, UsernameContext, getUsername} from './data/persistent_data.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,21 +48,23 @@ const App: () => Node = () => {
 
   return (
       <AuthContext.Provider value={(username) => setUsername(username)}>
-        <NavigationContainer>
-            <Stack.Navigator>
-                {username == null ? (
-                    <Stack.Screen
-                        name="login"
-                        component={LoginPage}
-                    />
-                ) : (
-                    <Stack.Screen
-                        name="home"
-                        component={Home}
-                    />
-                )}
-            </Stack.Navigator>
-        </NavigationContainer>
+         <UsernameContext.Provider value={username}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    {username == null ? (
+                        <Stack.Screen
+                            name="login"
+                            component={LoginPage}
+                        />
+                    ) : (
+                        <Stack.Screen
+                            name="home"
+                            component={Home}
+                        />
+                    )}
+                </Stack.Navigator>
+            </NavigationContainer>
+        </UsernameContext.Provider>
       </AuthContext.Provider>
   );
 };

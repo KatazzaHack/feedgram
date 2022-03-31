@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   FlatList,
   View,
@@ -7,20 +7,19 @@ import {
 
 import Post from './Post.js';
 
-import {getMediaIdsForUser} from '../data/network_requests.js'
-import {getMediaById} from '../data/network_requests.js'
-import {getUsername} from '../data/persistent_data.js';
+import { getMediaIdsForUser } from '../data/network_requests.js'
+import { getMediaById } from '../data/network_requests.js'
+import { UsernameContext } from '../data/persistent_data.js';
 
 const AccountPage = (): Node => {
     // TODO: Get posts for the current logged in user.
     const POSTS = ['https://reactnative.dev/img/tiny_logo.png',
     'https://reactnative.dev/img/tiny_logo.png'];
 
-    const [username, setUsername] = useState(null);
     const [posts, setPosts] = useState([]);
     const [mediaIds, setMediaIds] = useState([]);
 
-    getUsername().then(username => setUsername(username));
+    const username = useContext(UsernameContext);
 
     useEffect(() => {
         async function fetchMediaIds() {

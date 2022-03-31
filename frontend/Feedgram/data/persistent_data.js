@@ -4,6 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Context created for setting the username. Used on the login page.
 export const AuthContext = createContext();
 
+// Context created for getting the username.
+export const UsernameContext = createContext();
+
 export const getUsername = async () => {
   try {
     const username = await AsyncStorage.getItem('@storage_username');
