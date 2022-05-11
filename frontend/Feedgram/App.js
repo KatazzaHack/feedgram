@@ -24,6 +24,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './ui/Home.js';
 import LoginPage from './ui/LoginPage.js';
+import LogoutButton from './ui/components/LogoutButton.js';
 
 import {AuthContext, UsernameContext, getUsername} from './data/persistent_data.js';
 
@@ -59,8 +60,13 @@ const App: () => Node = () => {
                         />
                     ) : (
                         <Stack.Screen
-                            name="home"
+                            name="Feedgram"
                             component={Home}
+                            options={{
+                              headerRight: () => (
+                                <LogoutButton/>
+                              ),
+                            }}
                         />
                     )}
                 </Stack.Navigator>
