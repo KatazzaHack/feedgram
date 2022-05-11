@@ -12,8 +12,6 @@ import SearchPage from './SearchPage.js';
 const Home: () => Node = () => {
     const Tab = createMaterialBottomTabNavigator();
 
-    // TODO(maffina): Tab navigator is not working on the web version.
-
     return (
     <SafeAreaView style={{flex: 1}} collapsable={false}>
        <Tab.Navigator>
