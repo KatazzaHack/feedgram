@@ -8,7 +8,7 @@ import (
 
 func GetMediaById(c *gin.Context) {
 	media_id := c.Param("media_id")
-	u, _ := utils.GenerateV4GetObjectSignedURL("https://storage.cloud.google.com/feedgram-images/blobs/" + media_id)
+	u, _ := utils.GenerateV4GetObjectSignedURL(media_id)
 	c.JSON(http.StatusOK, gin.H {
 		"id": u,
 		});
