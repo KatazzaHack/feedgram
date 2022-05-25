@@ -51,17 +51,22 @@ func SaveUserMapping(c *gin.Context, un string, uid string, client *datastore.Cl
 	}
 }
 
-func CreateNewUser(c *gin.Context) {
-	projectID := os.Getenv("PROJECTID")
+type NewUsername struct {
+   User_name string `form:"user_name"`
+}
 
+func CreateNewUser(c *gin.Context) {
+  username := NewUsername{}
+  c.Bind(&username)
+	projectID := os.Getenv("PROJECTID")
 	client, err := datastore.NewClient(c, projectID)
     if err != nil {
         log.Fatalf("Failed to create client: %v", err)
 	}
-    defer client.Close()
-	user_name := c.PostForm("user_name")
+  defer client.Close()
 	user_id := uuid.New().String()
+  user_name := username.User_name
 	SaveUserInformation(c, user_name, user_id, client);
 	SaveUserMapping(c, user_name, user_id, client);
-	c.JSON(http.StatusOK, gin.H {"status": "ok"})
+	c.JSON(http.StatusOK, gin.H {"status": "ok", "username": user_name})
 }

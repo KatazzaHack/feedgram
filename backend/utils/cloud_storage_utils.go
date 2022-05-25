@@ -4,6 +4,7 @@ import (
         "context"
         "fmt"
         "time"
+        "os"
 		"FeedGram/clients"
         "cloud.google.com/go/storage"
 )
@@ -31,6 +32,8 @@ func GenerateV4GetObjectSignedURL(object string) (string, error) {
                 Scheme:  storage.SigningSchemeV4,
                 Method:  "GET",
                 Expires: time.Now().Add(30 * time.Minute),
+                GoogleAccessID: "feedgram-storage-writer@feedgram-333720.iam.gserviceaccount.com",
+                PrivateKey: []byte(os.Getenv("PRKEY")),
         }
 
         u, err := client.Bucket(clients.Uploader.BucketName).SignedURL(object, opts)

@@ -35,7 +35,7 @@ func main() {
 	clients.DSClient = clients.NewDatastoreClient()
 	
 	router := gin.Default()
-  router.Use(CORSMiddleware())
+    router.Use(CORSMiddleware())
 
 	router.POST("/login/new_user", handlers.CreateNewUser)
 	// TODO: Get user from the authentificated user.
