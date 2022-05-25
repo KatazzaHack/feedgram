@@ -2,11 +2,12 @@ package utils
 
 import (
         "context"
+		"io/ioutil"
         "fmt"
         "time"
-        "os"
 		"FeedGram/clients"
         "cloud.google.com/go/storage"
+        "golang.org/x/oauth2/google"
 )
 
 // generateV4GetObjectSignedURL generates object signed URL with GET method.
@@ -19,26 +20,27 @@ func GenerateV4GetObjectSignedURL(object string) (string, error) {
         }
         defer client.Close()
 
-        // Signing a URL requires credentials authorized to sign a URL. You can pass
-        // these in through SignedURLOptions with one of the following options:
-        //    a. a Google service account private key, obtainable from the Google Developers Console
-        //    b. a Google Access ID with iam.serviceAccounts.signBlob permissions
-        //    c. a SignBytes function implementing custom signing.
-        // In this example, none of these options are used, which means the SignedURL
-        // function attempts to use the same authentication that was used to instantiate
-        // the Storage client. This authentication must include a private key or have
-        // iam.serviceAccounts.signBlob permissions.
-        opts := &storage.SignedURLOptions{
-                Scheme:  storage.SigningSchemeV4,
-                Method:  "GET",
-                Expires: time.Now().Add(30 * time.Minute),
-                GoogleAccessID: "feedgram-storage-writer@feedgram-333720.iam.gserviceaccount.com",
-                PrivateKey: []byte(os.Getenv("PRKEY")),
-        }
+        jsonKey, err := ioutil.ReadFile("feedgram-333720-eac863b2f002.json")
+		if err != nil {
+			return "", fmt.Errorf("cannot read the JSON key file, err: %v", err)
+		}
 
-        u, err := client.Bucket(clients.Uploader.BucketName).SignedURL(object, opts)
-        if err != nil {
-                return "", fmt.Errorf("Bucket(%q).SignedURL: %v", clients.Uploader.BucketName, err)
-        }
+		conf, err := google.JWTConfigFromJSON(jsonKey)
+		if err != nil {
+			return "", fmt.Errorf("google.JWTConfigFromJSON: %v", err)
+		}
+
+		opts := &storage.SignedURLOptions{
+			Method: "GET",
+			GoogleAccessID: conf.Email,
+			PrivateKey:     conf.PrivateKey,
+			Expires:        time.Now().Add(15*time.Minute),
+		}
+
+		u, err := storage.SignedURL(clients.Uploader.BucketName, object, opts)
+		if err != nil {
+			return "", fmt.Errorf("Unable to generate a signed URL: %v", err)
+		}
+
         return u, nil
 }
