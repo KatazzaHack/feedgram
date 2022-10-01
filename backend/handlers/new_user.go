@@ -64,9 +64,9 @@ func CreateNewUser(c *gin.Context) {
         log.Fatalf("Failed to create client: %v", err)
 	}
   defer client.Close()
-	user_id := uuid.New().String()
+  user_id := uuid.New().String()
   user_name := username.User_name
-	SaveUserInformation(c, user_name, user_id, client);
-	SaveUserMapping(c, user_name, user_id, client);
-	c.JSON(http.StatusOK, gin.H {"status": "ok", "username": user_name})
+  SaveUserInformation(c, user_name, user_id, client);
+  SaveUserMapping(c, user_name, user_id, client);
+  c.JSON(http.StatusOK, gin.H {"status": "ok", "username": user_name})
 }
