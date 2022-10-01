@@ -1,4 +1,7 @@
+import RNFetchBlob from 'rn-fetch-blob';
+
 const feedgram_backend = "http://feedgram-backend.feedgram-333720.ew.r.appspot.com";
+
 // TODO(maffina,antonhulikau): get rid of the unused headers
 const headers = {
     'Accept': 'application/json',
@@ -31,13 +34,14 @@ export const getMediaIdsForUser = async (user_name) => {
 export const newUser = async (user_name) => {
   try {
     const response = await fetch(
-    `${feedgram_backend}/login/new_user/`,
-    {method: 'POST',
+    `${feedgram_backend}/login/new_user/`, {
+     method: 'POST',
      headers: headers,
      body: JSON.stringify({
-       user_name: `${user_name}`,
+       user_name: `${user_name}`
      })
     });
+    console.log(response);
     const json = await response.json();
     return json;
   } catch (error) {
@@ -61,16 +65,23 @@ export const getMediaById = async (media_id) => {
 };
 
 //TODO(maffina): how to get FormFile?
-export const newMedia = async (user_name, media_id) => {
+export const newMedia = async (username, rnfb_uri) => {
+  console.log("trying to send a post request to send a new media.");
   try {
-    const response = await fetch(
-    `${feedgram_backend}/${user_name}/media/`,
-    {method: 'POST',
-     headers: headers,
-    });
+    const response = await RNFetchBlob.fetch('POST',
+        `${feedgram_backend}/${username}/new_media` , {
+       'Content-Type' : 'multipart/form-data',
+       'Accept': 'application/json',
+       'Access-Control-Request-Headers':  '*',
+       'Access-Control-Allow-Headers':  '*',
+       'Access-Control-Allow-Origin':  '*',
+       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }, rnfb_uri);
+    console.log('Response: ', response);
     const json = await response.json();
-    return json;
-  } catch (error) {
+    return json["id"];
+  } catch(error) {
     console.error(error);
   }
 };
