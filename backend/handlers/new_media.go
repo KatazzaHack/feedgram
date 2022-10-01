@@ -48,7 +48,12 @@ func CreateNewMedia(c *gin.Context) {
 
     logName := "my-log"
     logger := clientL.Logger(logName).StandardLogger(logging.Info)
-    logger.Println("%v", c.Request.Body)
+    logger.Println("CreateNewMedia request")
+    form, errF := c.MultipartForm()
+    if errF != nil {
+        logger.Println("Can not get multipart form %v", errF)
+    }
+    logger.Println("%v", form)
 
 	user_name := c.Param("user_name")
 	logger.Println("%v - user to upload data", user_name)
