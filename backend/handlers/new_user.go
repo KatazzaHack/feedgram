@@ -51,6 +51,15 @@ func SaveUserMapping(c *gin.Context, un string, uid string, client *datastore.Cl
 	}
 }
 
+func userExists(c *gin.Context, un string, cl * datastore.Client) bool {
+  var users []types.User;
+  	q := datastore.NewQuery("user_mapping").Filter("user_name=", un).Limit(1);
+  	if _, err := cl.GetAll(c, q, &users); err != nil {
+  		log.Fatalf("Failed to get user: %v", err)
+  	}
+  	return len(users) > 0;
+}
+
 type NewUsername struct {
    User_name string `form:"user_name"`
 }
@@ -66,6 +75,9 @@ func CreateNewUser(c *gin.Context) {
   defer client.Close()
   user_id := uuid.New().String()
   user_name := username.User_name
+  if userExists(c, user_name, client) {
+    c.JSON(http.StatusOK, gin.H {"status": "User exists", "username": user_name})
+  }
   SaveUserInformation(c, user_name, user_id, client);
   SaveUserMapping(c, user_name, user_id, client);
   c.JSON(http.StatusOK, gin.H {"status": "ok", "username": user_name})
