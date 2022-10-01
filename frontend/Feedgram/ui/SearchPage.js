@@ -36,8 +36,8 @@ const SearchPage = (): Node => {
     return (
       <View>
          <TextInput
-            onChangeText={onUsernameChanged}
-            value={username}
+            onChangeText={onUsernameSearchFieldChanged}
+            value={usernameSearchField}
             placeholder="username"
          />
          <Button
