@@ -34,7 +34,7 @@ export const getMediaIdsForUser = async (user_name) => {
 export const newUser = async (user_name) => {
   try {
     const response = await fetch(
-    `${feedgram_backend}/login/new_user/`, {
+    `${feedgram_backend}/login/new_user`, {
      method: 'POST',
      headers: headers,
      body: JSON.stringify({
