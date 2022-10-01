@@ -5,9 +5,7 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native';
-
 import { useFocusEffect } from '@react-navigation/native';
-
 import Post from './Post.js';
 
 import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
@@ -37,6 +35,7 @@ const AccountPage = ( { navigation } ): Node => {
         }
          fetchMediaIds().then(() => setIsLoading(false));
     }, [username]));
+
 
     const renderPost = (item) => <Post image_uri={item}/>;
 
