@@ -16,6 +16,7 @@ import (
 	"FeedGram/types"
 	"FeedGram/clients"
 	"cloud.google.com/go/datastore"
+	"cloud.google.com/go/logging"
 )
 
 func UploadFile(file multipart.File, object string) error {
@@ -38,6 +39,15 @@ func UploadFile(file multipart.File, object string) error {
 
 func CreateNewMedia(c *gin.Context) {
 	projectID := os.Getenv("PROJECTID")
+	clientL, errL := logging.NewClient(c, projectID)
+
+	if errL != nil {
+      log.Fatalf("Failed to create client: %v", errL)
+    }
+    defer clientL.Close()
+
+    logName := "my-log"
+    logger := clientL.Logger(logName).StandardLogger(logging.Info)
 
 	user_name := c.Param("user_name")
 
@@ -65,6 +75,7 @@ func CreateNewMedia(c *gin.Context) {
 	user_media_list := userInformation[0].MediaList;
 	user_key := datastore.NameKey("user_information", user_id, nil)
 
+	logger.Println("%v", c.FormFile)
 
 	media_data, _ := c.FormFile("media_data")
 	new_media_id := uuid.New().String()
