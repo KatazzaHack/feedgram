@@ -84,7 +84,7 @@ func CreateNewMedia(c *gin.Context) {
 	user_media_list := userInformation[0].MediaList;
 	user_key := datastore.NameKey("user_information", user_id, nil)
 
-	media_data, _ := form["file_to_upload")
+	media_data, _ := c.FormFile("file_to_upload")
 	new_media_id := uuid.New().String()
 
 	user_media_list = append(user_media_list, new_media_id)
