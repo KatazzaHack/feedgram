@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import {
   FlatList,
   View,
@@ -6,18 +6,21 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import { useFocusEffect } from '@react-navigation/native';
+
 import Post from './Post.js';
 
 import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
 import { UsernameContext } from '../data/persistent_data.js';
 
-const AccountPage = (): Node => {
+const AccountPage = ( { navigation } ): Node => {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const username = useContext(UsernameContext);
 
-    useEffect(() => {
+    useFocusEffect(
+    useCallback(() => {
         if (!username) {
             return;
         }
@@ -32,8 +35,8 @@ const AccountPage = (): Node => {
             });
           })
         }
-        fetchMediaIds().then(() => setIsLoading(false));
-    }, [username]);
+         fetchMediaIds().then(() => setIsLoading(false));
+    }, [username]));
 
     const renderPost = (item) => <Post image_uri={item}/>;
 
