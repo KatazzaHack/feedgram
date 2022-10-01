@@ -15,16 +15,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Compress action step
-      uses: a7ul/tar-action@v1.1.0
-      id: compress
-      with:
-        command: c
-        cwd: ./frontend/Feedgram
-        files: |
-          ./node_modules
-        outPath: node_modules.tar.gz
-
     - name: Deploy to App Engine
       id: deploy
       uses: google-github-actions/deploy-appengine@v0.2.0
