@@ -9,6 +9,7 @@ import (
 	"cloud.google.com/go/datastore"
 	"log"
 	"os"
+	"cloud.google.com/go/logging"
 )
 
 func GetMediaForUser(c *gin.Context) {
@@ -27,6 +28,18 @@ func GetMediaForUser(c *gin.Context) {
 		log.Fatalf("Failed to get user: %v", err)
 	}
 
+	clientL, errL := logging.NewClient(c, projectID)
+
+    	if errL != nil {
+          log.Fatalf("Failed to create client: %v", errL)
+        }
+        defer clientL.Close()
+
+        logName := "my-log"
+        logger := clientL.Logger(logName).StandardLogger(logging.Info)
+
+
+
 	user_id := users[0].UserId;
 	// TODO: Get the media ids from the database based on the user.
 	q = datastore.NewQuery("user_information").Filter("user_id=", user_id).Limit(1);
@@ -34,5 +47,6 @@ func GetMediaForUser(c *gin.Context) {
 	if _, err := client.GetAll(c, q, &userInformation); err != nil {
 		log.Fatalf("Failed to get user: %v", err)
 	}
+	logger.Println("Returned media for user %v %v", user_id, userInformation)
 	c.JSON(http.StatusOK, gin.H {"ids": userInformation[0].MediaList})
 }
