@@ -75,9 +75,10 @@ func CreateNewUser(c *gin.Context) {
   defer client.Close()
   user_id := uuid.New().String()
   user_name := username.User_name
-  if userExists(c, user_name, client) {
-    c.JSON(http.StatusOK, gin.H {"status": "User exists", "username": user_name})
-  }
+ // if userExists(c, user_name, client) {
+ //   c.JSON(http.StatusOK, gin.H {"status": "User exists", "username": user_name})
+ //   return;
+ // }
   SaveUserInformation(c, user_name, user_id, client);
   SaveUserMapping(c, user_name, user_id, client);
   c.JSON(http.StatusOK, gin.H {"status": "ok", "username": user_name})
