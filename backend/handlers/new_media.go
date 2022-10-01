@@ -48,8 +48,10 @@ func CreateNewMedia(c *gin.Context) {
 
     logName := "my-log"
     logger := clientL.Logger(logName).StandardLogger(logging.Info)
+    logger.Println("%v", c.Request.Body)
 
 	user_name := c.Param("user_name")
+	logger.Println("%v - user to upload data", user_name)
 
 	client, err := datastore.NewClient(c, projectID)
     if err != nil {
@@ -65,6 +67,8 @@ func CreateNewMedia(c *gin.Context) {
 
 	user_id := users[0].UserId;
 
+	logger.Println("%v - user_id to upload data", user_id)
+
 
 	q = datastore.NewQuery("user_information").Filter("user_id=", user_id).Limit(1);
 	var userInformation []types.UserInfo;
@@ -74,8 +78,6 @@ func CreateNewMedia(c *gin.Context) {
 
 	user_media_list := userInformation[0].MediaList;
 	user_key := datastore.NameKey("user_information", user_id, nil)
-
-	logger.Println("%v", c.FormFile)
 
 	media_data, _ := c.FormFile("media_data")
 	new_media_id := uuid.New().String()
