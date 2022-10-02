@@ -3,11 +3,18 @@ import {
   FlatList,
   View,
   TextInput,
-  Button
-} from 'react-native'
+  Button,
+  StyleSheet,
+} from 'react-native';
 
 import Post from './Post.js';
 import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
+
+const styles = StyleSheet.create({
+    input: {
+        color: "#000000",
+    },
+});
 
 const SearchPage = (): Node => {
     const [usernameSearchField, onUsernameSearchFieldChanged] = React.useState("");
@@ -36,6 +43,7 @@ const SearchPage = (): Node => {
     return (
       <View>
          <TextInput
+            style={styles.input}
             onChangeText={onUsernameSearchFieldChanged}
             value={usernameSearchField}
             placeholder="username"
