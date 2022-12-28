@@ -8,7 +8,7 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import Post from './Post.js';
 
-import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
+import { getPostIdsForUser, getPostById } from '../data/network_requests.js';
 import { UsernameContext } from '../data/persistent_data.js';
 
 const AccountPage = ( { navigation } ): Node => {
@@ -18,26 +18,27 @@ const AccountPage = ( { navigation } ): Node => {
     const username = useContext(UsernameContext);
 
     useFocusEffect(
-    useCallback(() => {
-        if (!username) {
-            return;
-        }
-        async function fetchMediaIds() {
-          mediaIds = await getMediaIdsForUser(username);
-          console.log('Media ids: ', mediaIds);
-          var nPosts = [];
-          mediaIds.forEach(id => {
-            getMediaById(id).then(media => {
-               nPosts.push(media);
-               setPosts(nPosts);
-            });
-          })
-        }
-         fetchMediaIds().then(() => setIsLoading(false));
-    }, [username]));
+        useCallback(() => {
+            if (!username) {
+                return;
+            }
+            async function fetchPostIds() {
+              let postIds = await getPostIdsForUser(username);
+              console.log('Post ids: ', postIds);
+              var nPosts = [];
+              postIds.forEach(id => {
+                getPostById(id).then(post => {
+                   post["username"] = username;
+                   console.log("Post: ", post);
+                   nPosts.push(post);
+                   setPosts(nPosts);
+                });
+              })
+            }
+            fetchPostIds().then(() => setIsLoading(false));
+        }, [username]));
 
-
-    const renderPost = (item) => <Post image_uri={item}/>;
+    const renderPost = (post) => <Post username={post.username} media_ids={post.media_ids} title={post.title} description={post.description}/>;
 
      if (isLoading) {
        return <ActivityIndicator/>;
@@ -46,7 +47,7 @@ const AccountPage = ( { navigation } ): Node => {
           <View>
              <FlatList
                 data={posts}
-                renderItem={(item) => renderPost(item.item)}
+                renderItem={(post) => renderPost(post.item)}
              />
           </View>
       );

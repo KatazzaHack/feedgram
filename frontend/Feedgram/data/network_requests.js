@@ -49,6 +49,39 @@ export const newUser = async (user_name) => {
   }
 };
 
+export const getPostIdsForUser = async (user_name) => {
+  try {
+    const response = await fetch(
+    `${feedgram_backend}/${user_name}/get_posts`,
+    {method: 'GET',
+     headers: headers,
+    });
+    if (response.ok) {
+        const json = await response.json();
+        return json['post_ids'];
+    } else {
+        return [];
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getPostById = async (post_id) => {
+  try {
+    const response = await fetch(
+    `${feedgram_backend}/post/${post_id}`,
+    {method: 'GET',
+     headers: headers,
+    });
+    const json = await response.json();
+    console.log('Json: ', json);
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getMediaById = async (media_id) => {
   try {
     const response = await fetch(
@@ -64,12 +97,11 @@ export const getMediaById = async (media_id) => {
   }
 };
 
-//TODO(maffina): how to get FormFile?
-export const newMedia = async (username, rnfb_uri) => {
+export const newPost = async (username, form_data) => {
   console.log("trying to send a post request to send a new media.");
   try {
     const response = await RNFetchBlob.fetch('POST',
-        `${feedgram_backend}/${username}/new_media` , {
+        `${feedgram_backend}/${username}/new_post` , {
        'Content-Type' : 'multipart/form-data',
        'Accept': 'application/json',
        'Access-Control-Request-Headers':  '*',
@@ -77,10 +109,11 @@ export const newMedia = async (username, rnfb_uri) => {
        'Access-Control-Allow-Origin':  '*',
        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    }, rnfb_uri);
+    }, form_data);
     console.log('Response: ', response);
+    console.log("Uploading a post failed with a status ", response.respInfo.status);
     const json = await response.json();
-    return json["id"];
+    return json;
   } catch(error) {
     console.error(error);
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import {
   Image,
   View,
@@ -7,6 +7,8 @@ import {
   Dimensions,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getMediaById } from '../data/network_requests.js';
+import { useFocusEffect } from '@react-navigation/native';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -51,12 +53,32 @@ const styles = StyleSheet.create({
 });
 
 const Post = (props): Node => {
-    imageUri = props.image_uri;
-//    contentType = props.content_type;
-//    titleText = props.title_text;
+    const [isLoading, setIsLoading] = useState(true);
+    const [mediaUri, setMediaUri] = useState();
+
+    title = props.title;
+    description = props.description;
+    mediaIds = props.media_ids;
+    username = props.username;
+    console.log(title, description, mediaIds, username);
+
+    useFocusEffect(
+        useCallback(() => {
+            if (!username) {
+                return;
+            }
+            async function getMedia(id) {
+                 let imageUri = await getMediaById(id);
+                 setMediaUri(imageUri);
+            };
+            getMedia(mediaIds[0]).then(() => setIsLoading(false));
+        }, [mediaUri])
+    );
+
+//    contentType =props props.content_type;
+
     contentType = "video";
-    titleText = "Catch me If you can";
-    console.log(imageUri);
+//    console.log(imageUri);
     return (
       <View style={styles.container}>
         <View style={styles.postHeader}>
@@ -64,7 +86,7 @@ const Post = (props): Node => {
                color="black"
                size={24}/>
             <Text style={styles.titleText}>
-              {titleText}
+              {title}
             </Text>
             <Icon.Button color="black"
                 style={styles.bookmarkButton} name="book-outline"/>
@@ -72,7 +94,10 @@ const Post = (props): Node => {
         <View style={styles.ratingContainer}>
             <View style={styles.rating}/>
         </View>
-        <Image style={styles.image} source={{uri: imageUri}}/>
+        <Image style={styles.image} source={isLoading? null : {uri: mediaUri}}/>
+        <Text>
+          {description}
+        </Text>
       </View>
     );
 };

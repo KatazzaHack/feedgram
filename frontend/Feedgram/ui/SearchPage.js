@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Post from './Post.js';
-import { getMediaIdsForUser, getMediaById } from '../data/network_requests.js';
+import { getPostIdsForUser, getPostById } from '../data/network_requests.js';
 
 const styles = StyleSheet.create({
     input: {
@@ -22,23 +22,27 @@ const SearchPage = (): Node => {
     const [posts, setPosts] = React.useState();
 
     useEffect(() => {
-        async function fetchMediaIds() {
-          mediaIds = await getMediaIdsForUser(username);
+        async function fetchPostIds() {
+          let postIds = await getPostIdsForUser(username);
+          console.log('Post ids: ', postIds);
           var nPosts = [];
-          mediaIds.forEach(id => {
-            getMediaById(id).then(media => {
-               nPosts.push(media);
+          postIds.forEach(id => {
+            getPostById(id).then(post => {
+               post["username"] = username;
+               console.log("Post: ", post);
+               nPosts.push(post);
                setPosts(nPosts);
             });
           })
         }
-        fetchMediaIds();
+        fetchPostIds();
     }, [username]);
 
     onUsernameConfirmed = () => {
         onUsernameChanged(usernameSearchField);
     };
-    renderPost = (imageUri) => <Post image_uri={imageUri}/>;
+
+    const renderPost = (post) => <Post username={post.username} media_ids={post.media_ids} title={post.title} description={post.description}/>;
 
     return (
       <View>
