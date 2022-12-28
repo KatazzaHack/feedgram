@@ -37,7 +37,7 @@ func main() {
 	router.GET("/:user_name", handlers.GetMediaForUser)
 	router.GET("/media/:media_id", handlers.GetMediaById)
 	router.POST("/:user_name/new_post", handlers.CreateNewPost)
-	router.GET("/:user_name/get_posts", handlers.GetPosts)
+	router.GET("/:user_name/get_posts", handlers.GetPostsForUser)
 	router.GET("/post/:post_id", handlers.GetPostById)
 	router.Run()
 }
