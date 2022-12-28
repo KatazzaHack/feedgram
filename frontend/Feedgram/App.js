@@ -66,6 +66,7 @@ const App: () => Node = () => {
                               headerRight: () => (
                                 <LogoutButton/>
                               ),
+                              headerTitle: username,
                             }}
                         />
                     )}
