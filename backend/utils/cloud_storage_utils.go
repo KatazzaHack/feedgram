@@ -8,6 +8,8 @@ import (
 		"FeedGram/clients"
         "cloud.google.com/go/storage"
         "golang.org/x/oauth2/google"
+		"mime/multipart"
+		"io"
 )
 
 // generateV4GetObjectSignedURL generates object signed URL with GET method.
@@ -43,4 +45,22 @@ func GenerateV4GetObjectSignedURL(object string) (string, error) {
 		}
 
         return u, nil
+}
+
+func UploadFile(file multipart.File, object string) error {
+	ctx := context.Background()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	defer cancel()
+
+	// Upload an object with storage.Writer.
+	wc := clients.Uploader.Cl.Bucket(clients.Uploader.BucketName).Object(clients.Uploader.UploadPath + object).NewWriter(ctx)
+	if _, err := io.Copy(wc, file); err != nil {
+		return fmt.Errorf("io.Copy: %v", err)
+	}
+	if err := wc.Close(); err != nil {
+		return fmt.Errorf("Writer.Close: %v", err)
+	}
+
+	return nil
 }

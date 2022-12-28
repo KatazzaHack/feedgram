@@ -20,6 +20,7 @@ func SaveUserInformation(c *gin.Context, un string, uid string, client *datastor
 		UserName: un,
 		MediaList: []string{},
 		UserId:  uid,
+    PostList:  []string{},
 	}
 
 	// Saves the new entity.

@@ -20,3 +20,12 @@ handlers:
 
 - url: /:user_name/new_media
   script: main.go
+
+- url: /:user_name/new_post
+  script: main.go
+
+- url: /:user_name/get_posts
+  script: main.go
+
+- url: /post/:post_id
+  script: main.go

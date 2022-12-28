@@ -4,6 +4,14 @@ type UserInfo struct {
 	UserName  string `datastore:"user_name"`
 	MediaList []string `datastore:"media_ids"`
 	UserId    string `datastore:"user_id"`
+	PostList  []string `datastore:"post_ids"`
+}
+
+type PostInfo struct {
+	Description string `datastore:"description"`
+	MediaList   []string `datastore:"media_ids"`
+	Id          string `datastore:"post_id"`
+	Title		string `datastore:"title"`
 }
 
 type User struct {
