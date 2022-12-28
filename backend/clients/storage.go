@@ -2,8 +2,8 @@ package clients
 
 import (
 	"context"
-	"os"
 	"log"
+	"os"
 
 	"cloud.google.com/go/storage"
 )
@@ -31,6 +31,6 @@ func NewUploader() *ClientUploader {
 		BucketName: os.Getenv("BUCKETSTORAGENAME"),
 		ProjectID:  os.Getenv("PROJECTID"),
 		UploadPath: "blobs/",
-		SAccount: os.Getenv("SACCOUNT"),
+		SAccount: 	os.Getenv("SACCOUNT"),
 	}
 }
