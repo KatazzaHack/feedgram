@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"FeedGram/helpers"
 	"FeedGram/types"
 	"log"
 	"net/http"
-	"os"
 
 	"cloud.google.com/go/datastore"
 	"github.com/gin-gonic/gin"
@@ -30,13 +30,8 @@ func SaveUserInformation(c *gin.Context, un string, uid string, client *datastor
 }
 
 func SaveUserMapping(c *gin.Context, un string, uid string, client *datastore.Client) {
-	projectID := os.Getenv("PROJECTID")
-
-	client, err := datastore.NewClient(c, projectID)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-	defer client.Close()
+	dSClient, _ := helpers.NewDatastoreClient()
+	defer dSClient.Client.Close()
 	kind := "user_mapping"
 
 	userKey := datastore.NameKey(kind, un, nil)
@@ -62,25 +57,22 @@ func userExists(c *gin.Context, un string, cl *datastore.Client) bool {
 }
 
 type NewUsername struct {
-	User_name string `form:"user_name"`
+	UserName string `form:"user_name"`
 }
 
 func CreateNewUser(c *gin.Context) {
 	username := NewUsername{}
 	c.Bind(&username)
-	projectID := os.Getenv("PROJECTID")
-	client, err := datastore.NewClient(c, projectID)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-	defer client.Close()
-	user_id := uuid.New().String()
-	user_name := username.User_name
-	if userExists(c, user_name, client) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok", "username": user_name})
+	dSClient, _ := helpers.NewDatastoreClient()
+	defer dSClient.Client.Close()
+
+	userID := uuid.New().String()
+	userName := username.UserName
+	if userExists(c, userName, dSClient.Client) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok", "username": userName})
 		return
 	}
-	SaveUserInformation(c, user_name, user_id, client)
-	SaveUserMapping(c, user_name, user_id, client)
-	c.JSON(http.StatusOK, gin.H{"status": "ok", "username": user_name})
+	SaveUserInformation(c, userName, userID, dSClient.Client)
+	SaveUserMapping(c, userName, userID, dSClient.Client)
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "username": userName})
 }

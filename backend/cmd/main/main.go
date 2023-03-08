@@ -3,9 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"FeedGram/clients"
 	"FeedGram/handlers"
-	"FeedGram/types"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -24,9 +22,6 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 func main() {
-	types.GlobalDatabase = types.NewDatabase()
-	clients.Uploader = clients.NewUploader()
-	clients.DSClient = clients.NewDatastoreClient()
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 	router.POST("/login/new_user", handlers.CreateNewUser)

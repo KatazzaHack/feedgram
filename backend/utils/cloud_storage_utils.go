@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"FeedGram/clients"
+	"FeedGram/helpers"
 	"context"
 	"fmt"
 	"io"
@@ -40,7 +40,7 @@ func GenerateV4GetObjectSignedURL(object string) (string, error) {
 		Expires:        time.Now().Add(15 * time.Minute),
 	}
 
-	u, err := storage.SignedURL(clients.Uploader.BucketName, object, opts)
+	u, err := storage.SignedURL(helpers.Uploader.BucketName, object, opts)
 	if err != nil {
 		return "", fmt.Errorf("Unable to generate a signed URL: %v", err)
 	}
@@ -55,7 +55,7 @@ func UploadFile(file multipart.File, object string) error {
 	defer cancel()
 
 	// Upload an object with storage.Writer.
-	wc := clients.Uploader.Cl.Bucket(clients.Uploader.BucketName).Object(clients.Uploader.UploadPath + object).NewWriter(ctx)
+	wc := helpers.Uploader.Cl.Bucket(helpers.Uploader.BucketName).Object(helpers.Uploader.UploadPath + object).NewWriter(ctx)
 	if _, err := io.Copy(wc, file); err != nil {
 		return fmt.Errorf("io.Copy: %v", err)
 	}

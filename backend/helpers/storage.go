@@ -1,4 +1,4 @@
-package clients
+package helpers
 
 import (
 	"context"
@@ -20,10 +20,11 @@ var (
 	Uploader *ClientUploader
 )
 
-func NewUploader() *ClientUploader {
+func NewUploader() (*ClientUploader, error) {
 	client, err := storage.NewClient(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
+		return nil, err
 	}
 
 	return &ClientUploader{
@@ -32,5 +33,5 @@ func NewUploader() *ClientUploader {
 		ProjectID:  os.Getenv("PROJECTID"),
 		UploadPath: "blobs/",
 		SAccount:   os.Getenv("SACCOUNT"),
-	}
+	}, nil
 }
