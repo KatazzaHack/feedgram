@@ -71,14 +71,14 @@ func CreateNewPost(c *gin.Context) {
 	userPostList := userInformation[0].PostList
 	userKey := datastore.NameKey("user_information", userID, nil)
 
-	media_data, _ := c.FormFile("file_to_upload")
+	mediaData, _ := c.FormFile("file_to_upload")
 	title := c.PostForm("title")
 	description := c.PostForm("description")
-	new_media_id := uuid.New().String()
-	new_post_id := uuid.New().String()
+	newMediaID := uuid.New().String()
+	newPostID := uuid.New().String()
 
-	userMediaList = append(userMediaList, new_media_id)
-	userPostList = append(userPostList, new_post_id)
+	userMediaList = append(userMediaList, newMediaID)
+	userPostList = append(userPostList, newPostID)
 
 	userInfo := types.UserInfo{
 		UserName:  userInformation[0].UserName,
@@ -91,9 +91,9 @@ func CreateNewPost(c *gin.Context) {
 		log.Fatalf("Failed to update user: %v", err)
 	}
 
-	SavePostInformation(c, description, title, new_post_id, new_media_id, dSClient.Client)
+	SavePostInformation(c, description, title, newPostID, newMediaID, dSClient.Client)
 
-	data, _ := media_data.Open()
-	utils.UploadFile(data, new_media_id)
-	c.JSON(http.StatusOK, gin.H{"id": media_data.Filename})
+	data, _ := mediaData.Open()
+	utils.UploadFile(data, newMediaID)
+	c.JSON(http.StatusOK, gin.H{"id": mediaData.Filename})
 }
