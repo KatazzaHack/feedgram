@@ -9,7 +9,7 @@ import (
 )
 
 type DatastoreClient struct {
-	cl         *datastore.Client
+	cl *datastore.Client
 }
 
 var (
@@ -18,11 +18,11 @@ var (
 
 func NewDatastoreClient() *DatastoreClient {
 	client, err := datastore.NewClient(context.Background(), os.Getenv("PROJECTID"))
-    if err != nil {
-        log.Fatalf("Failed to create client: %v", err)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
 	}
 
 	return &DatastoreClient{
-		cl:         client,
+		cl: client,
 	}
 }

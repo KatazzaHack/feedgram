@@ -1,22 +1,22 @@
 package handlers
 
 import (
-
 	"context"
-	"time"
-	"mime/multipart"
-	"io"
 	"fmt"
+	"io"
+	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
-	"log"
+	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"FeedGram/types"
 	"FeedGram/clients"
+	"FeedGram/types"
+
 	"cloud.google.com/go/datastore"
 	"cloud.google.com/go/logging"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func UploadFile(file multipart.File, object string) error {
@@ -42,46 +42,45 @@ func CreateNewMedia(c *gin.Context) {
 	clientL, errL := logging.NewClient(c, projectID)
 
 	if errL != nil {
-      log.Fatalf("Failed to create client: %v", errL)
-    }
-    defer clientL.Close()
+		log.Fatalf("Failed to create client: %v", errL)
+	}
+	defer clientL.Close()
 
-    logName := "my-log"
-    logger := clientL.Logger(logName).StandardLogger(logging.Info)
-    logger.Println("CreateNewMedia request")
-    form, errF := c.MultipartForm()
-    if errF != nil {
-        logger.Println("Can not get multipart form %v", errF)
-    }
-    logger.Println("%v", form)
+	logName := "my-log"
+	logger := clientL.Logger(logName).StandardLogger(logging.Info)
+	logger.Println("CreateNewMedia request")
+	form, errF := c.MultipartForm()
+	if errF != nil {
+		logger.Println("Can not get multipart form %v", errF)
+	}
+	logger.Println("%v", form)
 
 	user_name := c.Param("user_name")
 	logger.Println("%v - user to upload data", user_name)
 
 	client, err := datastore.NewClient(c, projectID)
-    if err != nil {
-        log.Fatalf("Failed to create client: %v", err)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
 	}
-    defer client.Close()
+	defer client.Close()
 
-	var users []types.User;
-	q := datastore.NewQuery("user_mapping").Filter("user_name=", user_name).Limit(1);
+	var users []types.User
+	q := datastore.NewQuery("user_mapping").Filter("user_name=", user_name).Limit(1)
 	if _, err := client.GetAll(c, q, &users); err != nil {
 		log.Fatalf("Failed to get user: %v", err)
 	}
 
-	user_id := users[0].UserId;
+	user_id := users[0].UserId
 
 	logger.Println("%v - user_id to upload data", user_id)
 
-
-	q = datastore.NewQuery("user_information").Filter("user_id=", user_id).Limit(1);
-	var userInformation []types.UserInfo;
+	q = datastore.NewQuery("user_information").Filter("user_id=", user_id).Limit(1)
+	var userInformation []types.UserInfo
 	if _, err := client.GetAll(c, q, &userInformation); err != nil {
 		log.Fatalf("Failed to get user: %v", err)
 	}
 
-	user_media_list := userInformation[0].MediaList;
+	user_media_list := userInformation[0].MediaList
 	user_key := datastore.NameKey("user_information", user_id, nil)
 
 	media_data, _ := c.FormFile("file_to_upload")
@@ -89,10 +88,10 @@ func CreateNewMedia(c *gin.Context) {
 
 	user_media_list = append(user_media_list, new_media_id)
 
-	userInfo := types.UserInfo {
-		UserName: userInformation[0].UserName,
+	userInfo := types.UserInfo{
+		UserName:  userInformation[0].UserName,
 		MediaList: user_media_list,
-		UserId:  userInformation[0].UserId,
+		UserId:    userInformation[0].UserId,
 	}
 
 	if _, err := client.Mutate(c, datastore.NewUpdate(user_key, &userInfo)); err != nil {
@@ -100,5 +99,5 @@ func CreateNewMedia(c *gin.Context) {
 	}
 	data, _ := media_data.Open()
 	UploadFile(data, new_media_id)
-	c.JSON(http.StatusOK, gin.H {"id": media_data.Filename})
+	c.JSON(http.StatusOK, gin.H{"id": media_data.Filename})
 }
