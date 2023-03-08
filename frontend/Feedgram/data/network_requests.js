@@ -89,6 +89,7 @@ export const getMediaById = async (media_id) => {
     {method: 'GET',
      headers: headers,
     });
+    console.log('Response: ', response);
     const json = await response.json();
     console.log('Json: ', json);
     return json["id"];
@@ -112,8 +113,7 @@ export const newPost = async (username, form_data) => {
     }, form_data);
     console.log('Response: ', response);
     console.log("Uploading a post failed with a status ", response.respInfo.status);
-    const json = await response.json();
-    return json;
+    return response;
   } catch(error) {
     console.error(error);
   }

@@ -6,6 +6,9 @@ module.exports = {
     filename: './dist/bundle.js',
   },
   mode: 'development',
+  externals: {
+          "react-native": true,
+      },
   module: {
     rules: [
       {

@@ -4,7 +4,8 @@ import {
   Button,
   TextInput,
   Image,
-  StyleSheet
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import DocumentPicker, {
   DocumentPickerResponse,
@@ -16,21 +17,38 @@ import Post from './Post.js';
 import { newPost } from '../data/network_requests.js';
 import { UsernameContext } from '../data/persistent_data.js';
 
+const deviceWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
     input: {
         color: "#000000",
     },
+    image: {
+        height: '100%',
+        width: '100%',
+    },
+    container: {
+        width: deviceWidth,
+        height: deviceWidth,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 const NewPostPage = (): Node => {
     const [title, onTitleChanged] = React.useState("");
     const [description, onDescriptionChanged] = React.useState("");
     const [file, setFile] = React.useState();
+    const [imageToLoadUri, setImageToLoadUri] = React.useState();
+    const [showSuccess, setShowSuccess] = React.useState(false);
 
     const username = useContext(UsernameContext);
 
     const handleFileChoice = (file) => {
         setFile(file);
+        setImageToLoadUri(file.uri);
+        setShowSuccess(false);
+        console.log("Image to load: ", imageToLoadUri);
         console.log("Chosen file for upload: ", file);
     };
 
@@ -46,6 +64,11 @@ const NewPostPage = (): Node => {
     };
 
     const uploadPost = () => {
+        // Do nothing in case file is not chosen.
+        if (!imageToLoadUri) return;
+        // Do nothing in case file is already uploaded.
+        if (showSuccess) return;
+
         console.log("Uploading file: ", file);
         const formData = [];
         formData.push({
@@ -62,8 +85,18 @@ const NewPostPage = (): Node => {
             name: 'description',
             data: description,
         });
-        let json_response = newPost(username, formData);
+        newPost(username, formData).then((response) => {
+            if (response.respInfo.status === 200) {
+                setShowSuccess(true);
+            }
+        });
     };
+
+    const getImagePreview = () => {
+        if (showSuccess) return <Image style={styles.image} source={require('../static_data/uploaded_photo.png')} />
+        else if (file) return <Image style={styles.image} source={{uri: imageToLoadUri}} />
+        else return <Image style={styles.image} source={require('../static_data/upload_photo.png')} />
+    }
 
     return (
         <View>
@@ -79,6 +112,9 @@ const NewPostPage = (): Node => {
                 value={description}
                 placeholder="Enter your feedback..."
             />
+            <View style={styles.container}>
+                {getImagePreview()}
+            </View>
             <Button title="Choose file"
                 onPress={() => {
                   DocumentPicker.pickSingle({
