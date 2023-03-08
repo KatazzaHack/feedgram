@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"FeedGram/handlers"
+	"FeedGram/helpers"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -22,6 +23,8 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 func main() {
+	// DO NOT DELETE THIS LINE
+	helpers.Uploader, _ = helpers.NewUploader()
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 	router.POST("/login/new_user", handlers.CreateNewUser)
