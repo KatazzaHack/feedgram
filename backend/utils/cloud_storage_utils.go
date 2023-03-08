@@ -1,50 +1,51 @@
 package utils
 
 import (
-        "context"
-		"io/ioutil"
-        "fmt"
-        "time"
-		"FeedGram/clients"
-        "cloud.google.com/go/storage"
-        "golang.org/x/oauth2/google"
-		"mime/multipart"
-		"io"
+	"FeedGram/helpers"
+	"context"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"time"
+
+	"cloud.google.com/go/storage"
+	"golang.org/x/oauth2/google"
 )
 
 // generateV4GetObjectSignedURL generates object signed URL with GET method.
 func GenerateV4GetObjectSignedURL(object string) (string, error) {
 
-        ctx := context.Background()
-        client, err := storage.NewClient(ctx)
-        if err != nil {
-                return "", fmt.Errorf("storage.NewClient: %v", err)
-        }
-        defer client.Close()
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return "", fmt.Errorf("storage.NewClient: %v", err)
+	}
+	defer client.Close()
 
-        jsonKey, err := ioutil.ReadFile("feedgram-333720-eac863b2f002.json")
-		if err != nil {
-			return "", fmt.Errorf("cannot read the JSON key file, err: %v", err)
-		}
+	jsonKey, err := ioutil.ReadFile("feedgram-333720-eac863b2f002.json")
+	if err != nil {
+		return "", fmt.Errorf("cannot read the JSON key file, err: %v", err)
+	}
 
-		conf, err := google.JWTConfigFromJSON(jsonKey)
-		if err != nil {
-			return "", fmt.Errorf("google.JWTConfigFromJSON: %v", err)
-		}
+	conf, err := google.JWTConfigFromJSON(jsonKey)
+	if err != nil {
+		return "", fmt.Errorf("google.JWTConfigFromJSON: %v", err)
+	}
 
-		opts := &storage.SignedURLOptions{
-			Method: "GET",
-			GoogleAccessID: conf.Email,
-			PrivateKey:     conf.PrivateKey,
-			Expires:        time.Now().Add(15*time.Minute),
-		}
+	opts := &storage.SignedURLOptions{
+		Method:         "GET",
+		GoogleAccessID: conf.Email,
+		PrivateKey:     conf.PrivateKey,
+		Expires:        time.Now().Add(15 * time.Minute),
+	}
 
-		u, err := storage.SignedURL(clients.Uploader.BucketName, object, opts)
-		if err != nil {
-			return "", fmt.Errorf("Unable to generate a signed URL: %v", err)
-		}
+	u, err := storage.SignedURL(helpers.Uploader.BucketName, object, opts)
+	if err != nil {
+		return "", fmt.Errorf("Unable to generate a signed URL: %v", err)
+	}
 
-        return u, nil
+	return u, nil
 }
 
 func UploadFile(file multipart.File, object string) error {
@@ -54,7 +55,7 @@ func UploadFile(file multipart.File, object string) error {
 	defer cancel()
 
 	// Upload an object with storage.Writer.
-	wc := clients.Uploader.Cl.Bucket(clients.Uploader.BucketName).Object(clients.Uploader.UploadPath + object).NewWriter(ctx)
+	wc := helpers.Uploader.Cl.Bucket(helpers.Uploader.BucketName).Object(helpers.Uploader.UploadPath + object).NewWriter(ctx)
 	if _, err := io.Copy(wc, file); err != nil {
 		return fmt.Errorf("io.Copy: %v", err)
 	}

@@ -1,4 +1,4 @@
-package clients
+package helpers
 
 import (
 	"context"
@@ -9,20 +9,20 @@ import (
 )
 
 type DatastoreClient struct {
-	cl         *datastore.Client
+	Client *datastore.Client
 }
 
 var (
 	DSClient *DatastoreClient
 )
 
-func NewDatastoreClient() *DatastoreClient {
+func NewDatastoreClient() (*DatastoreClient, error) {
 	client, err := datastore.NewClient(context.Background(), os.Getenv("PROJECTID"))
-    if err != nil {
-        log.Fatalf("Failed to create client: %v", err)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
 	}
 
 	return &DatastoreClient{
-		cl:         client,
-	}
+		Client: client,
+	}, nil
 }
